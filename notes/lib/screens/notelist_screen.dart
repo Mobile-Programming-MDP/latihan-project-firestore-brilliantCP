@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes/models/note.dart';
+import 'package:notes/screens/google_map_screen.dart';
 import 'package:notes/services/note_services.dart';
 import 'package:notes/widgets/note_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,10 +40,10 @@ class NoteList extends StatelessWidget {
   const NoteList({super.key});
 
   Future<void> _launchUrl(_url) async {
-      if (!await launchUrl(_url)) {
-        throw Exception('Could not launch $_url');
-      }
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,11 +96,20 @@ class NoteList extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             InkWell(
-                              onTap: () {
-                                String url =
-                                    "https://www.google.com/maps/search/?api=1&query=${document!.lat},${document!.lng}";
-                                Uri uri = Uri.parse(url);
-                                _launchUrl(uri);
+                              onTap: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GoogleMapsScreen(
+                                      latitude: double.parse(document.lat!),
+                                      longitude: double.parse(document.lng!),
+                                    ),
+                                  ),
+                                );
+                                // String url =
+                                //     "https://www.google.com/maps/search/?api=1&query=${document!.lat},${document!.lng}";
+                                // Uri uri = Uri.parse(url);
+                                // _launchUrl(uri);
                                 // showAlertDialog(context, document);
                               },
                               child: const Padding(
